@@ -31,13 +31,13 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'dockerManage.apps.DockermanageConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'dockerManage',
 ]
 
 MIDDLEWARE = [
@@ -81,7 +81,7 @@ DATABASES = {
         'USER': 'root',
         'PASSWORD': '51reboot',
         'HOST': '127.0.0.1',
-        'PORT': '13306',
+        'PORT': '3306',
     }
 }
 

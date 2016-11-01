@@ -1,22 +1,31 @@
 from docker import Client
+import os
 
+app_parent_path = os.path.split(os.getcwd())[0]
+app_path = app_parent_path + '/app'
 
 class Container:
     def __init__(self):
         self.cli = Client(base_url='unix://var/run/docker.sock')
 
-    def start(self, service_port, image, cmd):
+    def start(self, image, app_name='vote', app_path=app_path+'/vote', service_port=80):
         self.container = self.cli.create_container(
-            image, cmd, ports=[service_port],
-            host_config = self.cli.create_host_config(port_bindings={
-                service_port: None
+            image, name=app_name, ports=[service_port], volumes=['/app'],
+            host_config = self.cli.create_host_config(binds={
+                app_path: {
+                    'bind': '/app',
+                    'mode': 'rw',
+                }
             })
         )
-        resp = self.cli.start(container=self.container.get('Id'))
-        """{u'1111/tcp': [{u'HostPort': u'32769', u'HostIp': u'0.0.0.0'}]}"""
-        return self.cli.inspect_container(self.container.get('Id'))['NetworkSettings']['Ports']['%d/tcp'%service_port][0]['HostPort']
+	app_container_id = self.container.get('Id')[:12]
+        app_container_name = app_name+'_'+app_container_id
 
+        self.cli.rename(app_container_id, app_container_name)
+        self.cli.start(container=app_container_id)
+
+        app_container_ip = self.cli.inspect_container(self.container.get('Id'))['NetworkSettings']['Networks']['bridge']['IPAddress']
+	return app_container_ip
+    
 if __name__ == "__main__":
-    print Container().start(1111, "centos", "tail -f /etc/hosts")
-    
-    
+    print Container().start("tiangolo/uwsgi-nginx-flask")
