@@ -1,4 +1,0 @@
-Django==1.10.2
-Flask==0.11.1
-Jinja2==2.8
-docker_py==1.10.5
