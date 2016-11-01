@@ -1,1 +1,0 @@
-[{"name": "vote", "upstream": [{"host": "172.17.0.3", "port": 80}, {"host": "172.17.0.4", "port": 80}]}, {"name": "check", "upstream": [{"host": "172.17.0.5", "port": 80}]}]
