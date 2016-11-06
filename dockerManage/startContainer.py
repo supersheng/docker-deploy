@@ -18,5 +18,3 @@ class Container:
 
 if __name__ == "__main__":
     print Container().start(1111, "centos", "tail -f /etc/hosts")
-    
-    
